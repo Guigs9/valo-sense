@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VALO SENSE</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #08090d;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            border-bottom: 1px solid #252731;
+            background: #0c0d12;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: #ff4655;
+        }
+
+        .rank {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+        }
+
+        .rank-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: #252731;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff4655;
+        }
+
+        /* HOME */
+
+        .home {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .home-content {
+            max-width: 800px;
+        }
+
+        .small-title {
+            color: #ff4655;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: clamp(55px, 10vw, 110px);
+            line-height: 0.9;
+            font-weight: 900;
+            letter-spacing: -5px;
+        }
+
+        .subtitle {
+            margin-top: 30px;
+            color: #a8aab3;
+            font-size: 20px;
+        }
+
+        .play-button {
+            margin-top: 45px;
+            border: none;
+            background: #ff4655;
+            color: white;
+            font-size: 18px;
+            font-weight: 900;
+            padding: 18px 55px;
+            cursor: pointer;
+            transition: 0.2s;
+            clip-path: polygon(
+                0 0,
+                95% 0,
+                100% 20%,
+                100% 100%,
+                5% 100%,
+                0 80%
+            );
+        }
+
+        .play-button:hover {
+            transform: scale(1.05);
+            background: #ff5c69;
+        }
+
+        /* GAME */
+
+        .game {
+            display: none;
+            flex: 1;
+            padding: 40px 6%;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .question-number {
+            color: #a8aab3;
+        }
+
+        .xp {
+            color: #ff4655;
+            font-weight: bold;
+        }
+
+        .video-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: auto;
+            background: #000;
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #292c35;
+        }
+
+        .fake-video {
+            text-align: center;
+            color: #555;
+        }
+
+        .fake-video p {
+            font-size: 50px;
+        }
+
+        .fake-video span {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .question-box {
+            max-width: 1000px;
+            margin: 25px auto 0;
+            padding: 25px;
+            background: #11131a;
+            border: 1px solid #292c35;
+        }
+
+        .question {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .answer {
+            background: #1a1c24;
+            border: 1px solid #30333d;
+            color: white;
+            padding: 18px;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 16px;
+        }
+
+        .answer:hover {
+            border-color: #ff4655;
+            background: #22242d;
+        }
+
+        .answer strong {
+            color: #ff4655;
+            margin-right: 8px;
+        }
+
+        .result {
+            display: none;
+            max-width: 1000px;
+            margin: 20px auto 0;
+            padding: 20px;
+            border: 1px solid #30333d;
+        }
+
+        .result.good {
+            border-color: #4ade80;
+        }
+
+        .result.bad {
+            border-color: #ff4655;
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .result.good .result-title {
+            color: #4ade80;
+        }
+
+        .result.bad .result-title {
+            color: #ff4655;
+        }
+
+        .explanation {
+            margin-top: 10px;
+            color: #b8bac2;
+            line-height: 1.5;
+        }
+
+        .next-button {
+            margin-top: 18px;
+            background: white;
+            color: #111;
+            border: none;
+            padding: 12px 25px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @media (max-width: 700px) {
+
+            .answers {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                letter-spacing: -3px;
+            }
+
+            .game {
+                padding: 25px 15px;
+            }
+
+            nav {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <nav>
+        <div class="logo">
+            VALO<span>SENSE</span>
+        </div>
+
+        <div class="rank">
+            <div class="rank-icon">I</div>
+            <div>
+                <div>IRON I</div>
+                <small id="xpDisplay">0 XP</small>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- PAGE D'ACCUEIL -->
+
+    <section class="home" id="home">
+
+        <div class="home-content">
+
+            <div class="small-title">
+                GAME SENSE TRAINING
+            </div>
+
+            <h1>
+                VALO<br>
+                SENSE
+            </h1>
+
+            <p class="subtitle">
+                Regarde. Décide. Apprends. Grimpe.
+            </p>
+
+            <button class="play-button" onclick="startGame()">
+                JOUER
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- JEU -->
+
+    <section class="game" id="game">
+
+        <div class="game-header">
+
+            <div class="question-number">
+                SITUATION 01
+            </div>
+
+            <div class="xp" id="gameXp">
+                0 XP
+            </div>
+
+        </div>
+
+
+        <!-- VIDEO TEMPORAIRE -->
+
+        <div class="video-container">
+
+            <div class="fake-video">
+
+                <p>▶</p>
+
+                <span>
+                    TON CLIP VALORANT ARRIVERA ICI
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUESTION -->
+
+        <div class="question-box">
+
+            <div class="question">
+                Tu es en 1v2. La spike est posée.
+                Tu as 50 HP et aucun utilitaire.
+                Que fais-tu ?
+            </div>
+
+
+            <div class="answers">
+
+                <button class="answer" onclick="answer(1)">
+                    <strong>A</strong>
+                    Repeek immédiatement
+                </button>
+
+                <button class="answer" onclick="answer(2)">
+                    <strong>B</strong>
+                    Jouer le temps
+                </button>
+
+                <button class="answer" onclick="answer(3)">
+                    <strong>C</strong>
+                    Push immédiatement
+                </button>
+
+                <button class="answer" onclick="answer(4)">
+                    <strong>D</strong>
+                    Faire du bruit pour attirer l'ennemi
+                </button>
+
+            </div>
+
+
+            <!-- RESULTAT -->
+
+            <div class="result" id="result">
+
+                <div class="result-title" id="resultTitle"></div>
+
+                <div class="explanation" id="explanation"></div>
+
+                <button class="next-button" onclick="backHome()">
+                    RETOUR AU MENU
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+    let xp = 0;
+
+    function startGame() {
+
+        document.getElementById("home").style.display = "none";
+
+        document.getElementById("game").style.display = "block";
+
+    }
+
+
+    function answer(choice) {
+
+        const result = document.getElementById("result");
+
+        const title = document.getElementById("resultTitle");
+
+        const explanation = document.getElementById("explanation");
+
+        result.style.display = "block";
+
+        if (choice === 2) {
+
+            xp += 50;
+
+            result.className = "result good";
+
+            title.textContent = "✓ BON CHOIX  +50 XP";
+
+            explanation.textContent =
+                "Jouer le temps est ici la décision la plus sûre. " +
+                "Tu n'as pas besoin de prendre un duel immédiatement. " +
+                "Les ennemis doivent agir avant la fin du timer.";
+
+        } else {
+
+            xp -= 25;
+
+            if (xp < 0) {
+                xp = 0;
+            }
+
+            result.className = "result bad";
+
+            title.textContent = "✕ MAUVAIS CHOIX  -25 XP";
+
+            explanation.textContent =
+                "Cette décision te fait prendre un risque important " +
+                "alors que tu peux laisser les adversaires venir à toi.";
+
+        }
+
+        document.getElementById("xpDisplay").textContent =
+            xp + " XP";
+
+        document.getElementById("gameXp").textContent =
+            xp + " XP";
+
+    }
+
+
+    function backHome() {
+
+        document.getElementById("game").style.display = "none";
+
+        document.getElementById("home").style.display = "flex";
+
+        document.getElementById("result").style.display = "none";
+
+    }
+
+</script>
+
+</body>
+</html>
